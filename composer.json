@@ -1,0 +1,16 @@
+{
+    "name": "misbah/excel-validator",
+    "description": "Validate Excel file",
+    "authors": [
+        {
+            "name": "Misbah Ansori",
+            "email": "misbah.ansori24@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Misbah\\ExcelValidator\\": "src/"
+        }
+    }
+}
