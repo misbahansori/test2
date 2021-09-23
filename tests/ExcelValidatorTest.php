@@ -16,9 +16,27 @@ class ExcelValidatorTest extends TestCase
 
     public function testValidate()
     {
-        var_dump($this->validator->validate('storage/Type_A.xlsx'));
-        die();
-        $this->assertSame($this->validator->validate("storage/Type_A.xlsx"), 'validating excel');
+        $this->assertSame($this->validator->validate("storage/Type_A.xlsx"), [
+            3 => [
+                'Missing value in field Field_A',
+                'Field_B should not contain space',
+                'Missing value in field Field_D'
+            ],
+            4 => [
+                'Missing value in field Field_A',
+                'Missing value in field Field_E'
+            ]
+        ]);
+
+        $this->assertEqualsCanonicalizing($this->validator->validate("storage/Type_B.xlsx"), [
+            3 => [
+                'Missing value in field Field_A',
+                'Field_B should not contain space',
+            ],
+            4 => [
+                'Missing value in field Field_A',
+            ]
+        ]);
     }
 
     public function testGetRules()

@@ -10,6 +10,7 @@ class ExcelValidator
 
     public function validate($path)
     {
+        $this->errorBag = [];
         $reader = new Xlsx();
         $spreadsheet = $reader->load($path);
         $activeSheet = $spreadsheet->getActiveSheet()->toArray();
