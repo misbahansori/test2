@@ -5,7 +5,6 @@ namespace Misbah\ExcelValidator;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 use Misbah\ExcelValidator\Validator\NoSpace;
 use Misbah\ExcelValidator\Validator\Required;
-use Misbah\ExcelValidator\Validator\ValidatorInterface;
 
 class ExcelValidator
 {
