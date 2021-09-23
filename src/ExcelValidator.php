@@ -3,9 +3,17 @@
 namespace Misbah\ExcelValidator;
 
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
+use Misbah\ExcelValidator\Validator\NoSpace;
+use Misbah\ExcelValidator\Validator\Required;
+use Misbah\ExcelValidator\Validator\ValidatorInterface;
 
 class ExcelValidator
 {
+    protected $validators = [
+        NoSpace::class,
+        Required::class,
+    ];
+
     protected $errorBag = [];
 
     public function validate($path)
@@ -35,14 +43,14 @@ class ExcelValidator
         return $this->getErrors();
     }
 
-    public function getrules($headers)
+    public function getrules($headers): array
     {
         return array_map(function ($header) {
-            if (strpos($header, '*') !== false) {
-                return 'required';
-            }
-            if (strpos($header, '#') !== false) {
-                return 'no_space';
+            foreach ($this->validators as $validator) {
+                $instance = new $validator();
+                if ($instance->getRule($header)) {
+                    return $instance->getKey();
+                }
             }
         }, $headers);
     }
@@ -51,14 +59,12 @@ class ExcelValidator
     {
         $columnName = str_replace(['*', '#'], '', $columnName);
 
-        if ($rule === 'required') {
-            if (empty($cell)) {
-                $this->addError("Missing value in field $columnName", $rowNumber);
-            }
-        }
-        if ($rule === 'no_space') {
-            if (strpos($cell, ' ') !== false) {
-                $this->addError("$columnName should not contain space", $rowNumber);
+        foreach ($this->validators as $validator) {
+            $instance = new $validator();
+            if ($rule === $instance->getKey()) {
+                if ($instance->validate($cell)) {
+                    $this->addError($instance->getMessage($columnName), $rowNumber);
+                }
             }
         }
     }

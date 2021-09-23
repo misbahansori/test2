@@ -14,7 +14,7 @@ class ExcelValidatorTest extends TestCase
         $this->validator = new ExcelValidator();
     }
 
-    public function testValidate()
+    public function test_validate()
     {
         $this->assertSame($this->validator->validate("storage/Type_A.xlsx"), [
             3 => [
@@ -39,7 +39,7 @@ class ExcelValidatorTest extends TestCase
         ]);
     }
 
-    public function testGetRules()
+    public function test_get_rules()
     {
         $headers = ['Field_A*', '#Field_B', 'Field_C', 'Field_D*', 'Field_E*'];
         $expectedRules = ['required', 'no_space', null, 'required', 'required'];
@@ -47,7 +47,7 @@ class ExcelValidatorTest extends TestCase
         $this->assertSame($this->validator->getrules($headers), $expectedRules);
     }
 
-    public function testValidateCellRequired()
+    public function test_validate_cell_required()
     {
         $this->validator->validateCell('', 'required', 1, 'Field_A*');
 
